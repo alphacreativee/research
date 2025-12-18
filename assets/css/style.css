@@ -11,6 +11,7 @@
   position: relative;
   width: 100%;
   height: 100svh;
+  overflow: hidden;
 }
 .sticky-slider {
   position: absolute;
@@ -34,7 +35,7 @@
   object-fit: cover;
 }
 .sticky-slider-right {
-  background-color: aqua;
+  background-color: #b1722a;
 }
 .sticky-nav {
   position: absolute;
@@ -58,6 +59,28 @@
 }
 .sticky-nav li.active {
   background-color: red;
+}
+.sticky-slider-content {
+  height: 100%;
+  padding-left: calc(calc(1 / 12) * 100%);
+  padding-right: calc(calc(1 / 12) * 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+.sticky-slider-content .description {
+  text-align: center;
+}
+.sticky-slider-content .image-content {
+  width: 200px;
+  height: 200px;
+}
+.sticky-slider-content .image-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .direction {
   width: 100%;
