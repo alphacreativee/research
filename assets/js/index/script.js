@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
   const slides = document.querySelectorAll(".sticky-slider");
   const navItems = document.querySelectorAll(".sticky-nav li");
+  const navLinks = document.querySelectorAll(".sticky-nav a");
+
   const tl = gsap.timeline({
     defaults: {
       ease: "none",
@@ -16,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
       scrub: true,
       onUpdate: (self) => {
         navItems.forEach((item) => item.classList.remove("active"));
-
         const activeIndex = Math.round(self.progress * (slides.length - 1));
         navItems[activeIndex].classList.add("active");
       },
@@ -31,31 +32,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const links = gsap.utils.toArray(".sticky-nav a");
-
-  function setActive(link) {
-    links.forEach((el) => el.classList.remove("active"));
-    link.classList.add("active");
-  }
-
-  links.forEach((a) => {
-    const element = document.querySelector(a.getAttribute("href"));
-    const linkST = ScrollTrigger.create({
-      trigger: element,
-      start: "top top",
-    });
-    ScrollTrigger.create({
-      trigger: element,
-      start: "top top",
-      end: "top top",
-      markers: true,
-      onToggle: (self) => self.isActive && setActive(a),
-    });
-    a.addEventListener("click", (e) => {
+  // Xử lý click cho navigation
+  navLinks.forEach((link, index) => {
+    link.addEventListener("click", (e) => {
       e.preventDefault();
+
+      // Tính progress tương ứng với slide index
+      const progress = index / (slides.length - 1);
+
+      // Lấy ScrollTrigger của timeline
+      const st = tl.scrollTrigger;
+
+      // Tính vị trí scroll dựa trên progress
+      const scrollPosition = st.start + (st.end - st.start) * progress;
+
+      // Scroll đến vị trí đó
       gsap.to(window, {
         duration: 1,
-        scrollTo: linkST.start,
+        scrollTo: scrollPosition,
+        ease: "power2.inOut",
         overwrite: "auto",
       });
     });
@@ -86,6 +81,16 @@ function initDirectionAnimation() {
   gsap.to(".direction-column:last-child .direction-list", {
     // yPercent: -60,
     y: -960,
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".direction",
+      start: "top top",
+      end: "+=200%",
+      scrub: 1,
+    },
+  });
+  gsap.to(".direction-column .direction-item img", {
+    xPercent: -10,
     ease: "none",
     scrollTrigger: {
       trigger: ".direction",
