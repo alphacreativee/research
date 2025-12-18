@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
       start: "top top",
       end: `top+=${slides.length * 1000}px top`,
       pin: true,
-      markers: true,
+      // markers: true,
       scrub: true,
       onUpdate: (self) => {
         navItems.forEach((item) => item.classList.remove("active"));
@@ -104,4 +104,29 @@ function initDirectionAnimation() {
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
   initDirectionAnimation();
+  animateTextKaraoke();
 });
+function animateTextKaraoke() {
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+  gsap.utils.toArray(".effect-karaoke").forEach((karaoke) => {
+    const splitKaraoke = new SplitText(karaoke, {
+      type: "words, chars",
+      wordsClass: "word",
+      charsClass: "char",
+    });
+
+    gsap.to(splitKaraoke.chars, {
+      color: "#00ffff",
+      duration: 0.6,
+      stagger: 0.05,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: karaoke,
+        start: "top 90%",
+        end: "top 30%",
+        markers: true,
+        scrub: true,
+      },
+    });
+  });
+}
